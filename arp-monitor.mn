@@ -1,0 +1,39 @@
+arp-monitor
+_IFNAME_ _IFINDEX_ _SECS_ _COUNT_
+
+arp-monitor [-hq] [-i --if IFNAME ] [-I --ifindex IFINDEX ] [-t --timeout SECS ] [-c --checkcount COUNT ] [ --syslog ]
+
+Default operation without any arguments is to listen for ARP packets on all interfaces.
+arp-monitor keeps track of all MAC addresses seen and IP addresses are claimed. After a certain configurable time has passed without seeing a MAC address it is removed from the list of known addresses. IP addresses are also disconnected from the MAC in the same way.
+ 
+Output:
+EVENT IFINDEX IFNAME HW DATE TIME IPLIST
+HW is the MAC address.
+IPLIST is a colon separated list of IP addresses claimed by HW.
+ 
+EVENT is one of the following:
+REG = New MAC hardware seen.
+IP  = New IP for MAC seen.
+CHK = MAC not seen in timeout seconds.
+REL = MAC not seen in timeout*checkcount seconds. Removed from list.
+
+No configuration files supported.
+
+tcpdump
+
+-h --help
+Short usage text.
+-i --if _IFNAME_
+Optionally only listen on interface _IFNAME_.
+-I --ifindex _IFINDEX_
+Optionally only listen on _IFINDEX_.
+-t --timeout _SECS_
+Every _SECS_ seconds a CHK event is reported if the HW has not been seen. Default value is 60 seconds.
+-c --checkcount _COUNT_
+Number of CHK events before release. Default is 10.
+-n --nocheck
+Do not report CHK events.
+-q --quiet
+Suppress output to stdout.
+--syslog
+Log to syslog using LOG_DAEMON.LOG_INFO. Support for syslog is optional at compile time.

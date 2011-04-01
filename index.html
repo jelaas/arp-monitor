@@ -1,0 +1,103 @@
+<html>
+<head>
+<title>arp-monitor</title>
+<h1>arp-monitor - monitor ARP packets</h1>
+</head>
+<body>
+<h2>Description</h2>
+<p>
+Captures all ARP packets seen on the network (by the host) and registers hardware address and all associated IP-addresses.<br>
+There is currently no support for IPv6.<br>
+Patches welcome!
+<pre>
+
+NAME
+       arp-monitor
+
+SYNOPSIS
+       arp-monitor [-hq] [-i --if IFNAME ] [-I --ifindex IFINDEX ]
+                   [-t --time-out SECS ] [-c --checkcount COUNT ] [ --syslog ]
+
+DESCRIPTION
+       Default operation without any arguments is to listen for ARP packets on
+       all interfaces.
+       arp-monitor  keeps track of all MAC addresses seen and IP addresses are
+       claimed. After a certain configurable time has passed without seeing  a
+       MAC  address  it  is  removed  from  the  list  of  known addresses. IP
+       addresses are also disconnected from the MAC in the same way.
+
+       Output:
+       EVENT IFINDEX IFNAME HW DATE TIME IPLIST
+       HW is the MAC address.
+       IPLIST is a colon separated list of IP addresses claimed by HW.
+
+       EVENT is one of the following:
+       REG = New MAC hardware seen.
+       IP  = New IP for MAC seen.
+       CHK = MAC not seen in timeout seconds.
+       REL = MAC not seen in timeout*checkcount seconds. Removed from list.
+
+OPTIONS
+       -h --help
+
+              Short usage text.
+
+       -i --if IFNAME
+
+              Optionally only listen on interface IFNAME.
+
+       -I --ifindex IFINDEX
+
+              Optionally only listen on IFINDEX.
+
+       -t --timeout SECS
+
+              Every SECS seconds a CHK event is reported if  the  HW  has  not
+              been seen. Default value is 60 seconds.
+
+       -c --checkcount COUNT
+
+              Number of CHK events before release. Default is 10.
+
+       -n --nocheck
+
+              Do not report CHK events.
+
+       -q --quiet
+
+              Suppress output to stdout.
+
+       --syslog
+
+              Log  to  syslog using LOG_DAEMON.LOG_INFO. Support for syslog is
+              optional at compile time.
+</pre>
+</p>
+<h2>Example</h2>
+<p>
+<pre>
+# ./arp-monitor 
+REG 36 br0 08:00:20:71:8c:08 2008-09-05 08:54:42 :10.10.10.11:
+REG 36 br0 00:04:23:b4:4d:a6 2008-09-05 08:54:42 :10.10.10.2:
+REG 36 br0 00:15:20:ab:d1:42 2008-09-05 08:54:43 :10.10.10.104:
+REG 36 br0 00:11:8b:18:92:3b 2008-09-05 08:54:43 :10.10.10.222:
+</pre>
+</p>
+<h2>Dependencies</h2>
+<p>
+<a href="http://infra.slu.se/jensl/jelio/">jelio</a>
+</p>
+<h2>Downloads</h2>
+<p>
+Source code: <a href="arp-monitor-1.1.tar.gz">arp-monitor-1.1.tar.gz</a>
+</p>
+<p>
+Compiled x86 binary (32 bits): <a href="arp-monitor">arp-monitor</a>
+</p>
+<h2>Contact</h2>
+<p>
+Software written by Jens Låås.
+Send patches and comments to jens.laas@data.slu.se.
+</p>
+</body>
+</html>
